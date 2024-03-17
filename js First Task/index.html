@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Splitter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border-radius: 6px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: orangered;
+            font-weight: 700;
+        }
+
+        input,
+        p,
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #112830;
+        }
+
+        .card {
+            color: #fff;
+            width: 50%;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #fff;
+        }
+
+        #lab {
+            color: orangered;
+            font-weight: 700;
+        }
+
+        span {
+            color: orangered;
+            font-weight: 900;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="main">
+        <div class="card">
+            <h1>URL Splitter</h1>
+
+            <input type="text" id="urlInput" placeholder="Enter URL">
+
+            <p>Protocol: <span id="protocolResult"></span></p>
+            <p>Domain Name: <span id="domainResult"></span></p>
+            <p>File Name: <span id="fileResult"></span></p>
+            <p id="lab">Check Box For What You Need :</p>
+            <input type="checkbox" id="protocolCheckbox" onclick="splitUrl()">
+            <label for="protocolCheckbox">Protocol</label><br>
+            <input type="checkbox" id="domainCheckbox" onclick="splitUrl()">
+            <label for="domainCheckbox">Domain Name</label><br>
+            <input type="checkbox" id="fileCheckbox" onclick="splitUrl()">
+            <label for="fileCheckbox">File Name</label><br>
+        </div>
+    </section>
+    <script>
+        function splitUrl() {
+            const url = document.getElementById('urlInput').value;
+            const protocolChecked = document.getElementById('protocolCheckbox').checked;
+            const domainChecked = document.getElementById('domainCheckbox').checked;
+            const fileChecked = document.getElementById('fileCheckbox').checked;
+
+            if (url === '') {
+                alert("Please enter a URL. This Page Will Reload Now !!");
+                window.location.reload();
+                return;
+            }
+
+            let protocol = '';
+            let domain = '';
+            let file = '';
+
+            const protocolIndex = url.indexOf('://');
+            if (protocolIndex !== -1 && protocolChecked) {
+                protocol = url.substring(0, protocolIndex + 3);
+            }
+
+            const domainStartIndex = protocolIndex === -1 ? 0 : protocolIndex + 3;
+            const domainEndIndex = url.indexOf('/', domainStartIndex);
+            if (domainEndIndex !== -1 && domainChecked) {
+                domain = url.substring(domainStartIndex, domainEndIndex);
+            } else if (domainChecked) {
+                domain = url.substring(domainStartIndex);
+            }
+
+            const fileStartIndex = domainEndIndex === -1 ? url.indexOf('/', domainStartIndex) : domainEndIndex;
+            if (fileChecked) {
+                const fileNameIndex = url.lastIndexOf('/');
+                if (fileNameIndex !== -1) {
+                    file = url.substring(fileNameIndex + 1);
+                }
+            }
+
+            document.getElementById('protocolResult').innerText = protocol;
+            document.getElementById('domainResult').innerText = domain;
+            document.getElementById('fileResult').innerText = file;
+        }
+    </script>
+
+</body>
+
+</html>
